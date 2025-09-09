@@ -1,4 +1,4 @@
-module github.com/oxia-io/testcontainers
+module github.com/oxia-db/testcontainers
 
 go 1.24.6
 
