@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/oxia-io/testcontainers/utils"
+	"github.com/oxia-db/testcontainers/testcontainers-go/utils"
 	"github.com/pkg/errors"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
