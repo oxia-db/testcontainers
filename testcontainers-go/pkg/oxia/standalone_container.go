@@ -58,7 +58,7 @@ func (s *StandaloneContainer) PublicAddress() string {
 	if err != nil {
 		panic(err)
 	}
-	return fmt.Sprintf(`%s:%s`, host, port)
+	return fmt.Sprintf(`%s:%s`, host, port.Port())
 }
 
 func Run(ctx context.Context, opts ...testcontainers.ContainerCustomizer) (*StandaloneContainer, error) {
