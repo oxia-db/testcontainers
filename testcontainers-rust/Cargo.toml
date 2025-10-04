@@ -1,0 +1,13 @@
+[package]
+name = "testcontainers-oxia"
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
+testcontainers = { version = "^0.25" }
+
+
+[dev-dependencies]
+liboxia = "0.0.1"
+tokio = { version = "1.47.0", features = ["rt-multi-thread", "macros"] }
+log = "0.4.28"
