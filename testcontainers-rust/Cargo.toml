@@ -3,6 +3,11 @@ name = "testcontainers-oxia"
 version = "0.0.1"
 edition = "2024"
 
+description = "oxia testcontainers in Rust"
+license = "Apache-2.0"
+repository = "https://github.com/oxia-db/testcontainers/tree/main/testcontainers-rust"
+homepage = "https://github.com/oxia-db/testcontainers/tree/main/testcontainers-rust"
+
 [dependencies]
 testcontainers = { version = "^0.25" }
 
