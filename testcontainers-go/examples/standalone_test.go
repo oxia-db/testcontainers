@@ -1,10 +1,10 @@
-package tests
+package examples
 
 import (
 	"io"
 	"testing"
 
-	"github.com/oxia-io/testcontainers/pkg/oxia"
+	"github.com/oxia-db/testcontainers/testcontainers-go/pkg/oxia"
 	"github.com/stretchr/testify/assert"
 )
 
