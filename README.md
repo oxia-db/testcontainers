@@ -9,4 +9,4 @@
 
 [crates-url]: https://crates.io/crates/testcontainers-oxia
 
-This repository provides Testcontainers modules for the Oxia distributed database, allowing you to easily run Oxia standalone or cluster containers for integration tests.
+This repository provides Testcontainers modules for Oxia, allowing you to easily run Oxia standalone or cluster containers for integration tests.
