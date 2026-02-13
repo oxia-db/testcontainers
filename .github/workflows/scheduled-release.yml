@@ -25,6 +25,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: main
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Configure git
         run: |
@@ -100,17 +101,17 @@ jobs:
               jvm)
                 sed -i "s/^version = '.*'/version = '${NEXT}'/" testcontainers-jvm/build.gradle
                 git add testcontainers-jvm/build.gradle
-                git commit -m "chore(jvm): bump version to ${NEXT}"
+                git diff --cached --quiet || git commit -m "chore(jvm): bump version to ${NEXT}"
                 ;;
               python)
                 sed -i "s/^version = \".*\"/version = \"${NEXT}\"/" testcontainers-python/pyproject.toml
                 git add testcontainers-python/pyproject.toml
-                git commit -m "chore(python): bump version to ${NEXT}"
+                git diff --cached --quiet || git commit -m "chore(python): bump version to ${NEXT}"
                 ;;
               rust)
                 sed -i '/^\[package\]/,/^\[/{s/^version = ".*"/version = "'"${NEXT}"'"/}' testcontainers-rust/Cargo.toml
                 git add testcontainers-rust/Cargo.toml
-                git commit -m "chore(rust): bump version to ${NEXT}"
+                git diff --cached --quiet || git commit -m "chore(rust): bump version to ${NEXT}"
                 ;;
               go)
                 echo "==> [go] Tag-only versioning, no file to update."
