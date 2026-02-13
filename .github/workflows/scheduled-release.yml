@@ -74,14 +74,18 @@ jobs:
               CURRENT="${LATEST_TAG#${TAG_PREFIX}}"
               echo "==> [$MODULE] Latest tag: ${LATEST_TAG} (version: ${CURRENT})"
 
-              # Check for changes since last tag
-              CHANGES=$(git diff --name-only "${LATEST_TAG}" HEAD -- "testcontainers-${MODULE}/")
-              if [ -z "$CHANGES" ]; then
-                echo "==> [$MODULE] No changes since ${LATEST_TAG}, skipping."
-                continue
+              # Check for changes since last tag (skip check on manual dispatch)
+              if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+                CHANGES=$(git diff --name-only "${LATEST_TAG}" HEAD -- "testcontainers-${MODULE}/")
+                if [ -z "$CHANGES" ]; then
+                  echo "==> [$MODULE] No changes since ${LATEST_TAG}, skipping."
+                  continue
+                fi
+                echo "==> [$MODULE] Changes detected:"
+                echo "$CHANGES"
+              else
+                echo "==> [$MODULE] Manual dispatch, skipping change check."
               fi
-              echo "==> [$MODULE] Changes detected:"
-              echo "$CHANGES"
             fi
 
             # Parse and bump version
