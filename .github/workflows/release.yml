@@ -77,6 +77,35 @@ jobs:
           generate_release_notes: true
           files: testcontainers-jvm/build/libs/*.jar
 
+  release-python:
+    needs: parse-tag
+    if: needs.parse-tag.outputs.module == 'testcontainers-python'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build
+        working-directory: testcontainers-python
+        run: |
+          pip install build
+          python -m build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: testcontainers-python/dist/
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: testcontainers-python v${{ needs.parse-tag.outputs.version }}
+          generate_release_notes: true
+
   release-rust:
     needs: parse-tag
     if: needs.parse-tag.outputs.module == 'testcontainers-rust'

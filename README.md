@@ -17,6 +17,7 @@ To see how to use these modules in practice, please refer to the examples direct
 
 - [Golang](./testcontainers-go/examples)
 - [JVM](./testcontainers-jvm)
+- [Python](./testcontainers-python)
 - [Rust](./testcontainers-rust/examples)
 
 ## Contributing
