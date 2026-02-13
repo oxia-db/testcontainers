@@ -4,6 +4,21 @@ on:
   push:
     tags:
       - 'testcontainers-*/v*.*.*'
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module to release'
+        required: true
+        type: choice
+        options:
+          - testcontainers-go
+          - testcontainers-jvm
+          - testcontainers-python
+          - testcontainers-rust
+      version:
+        description: 'Version to release (e.g. 0.0.1)'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -18,9 +33,14 @@ jobs:
       - name: Parse tag
         id: parse
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          MODULE="${TAG%/v*}"
-          VERSION="${TAG#*/v}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            MODULE="${{ inputs.module }}"
+            VERSION="${{ inputs.version }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            MODULE="${TAG%/v*}"
+            VERSION="${TAG#*/v}"
+          fi
           echo "module=$MODULE" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Module: $MODULE, Version: $VERSION"
