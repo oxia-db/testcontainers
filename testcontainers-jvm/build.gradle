@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'io.github.oxia-db'
-version = '0.1.0'
+version = '0.0.1'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
