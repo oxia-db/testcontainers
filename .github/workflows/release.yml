@@ -1,0 +1,103 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'testcontainers-*/v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  parse-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      module: ${{ steps.parse.outputs.module }}
+      version: ${{ steps.parse.outputs.version }}
+    steps:
+      - name: Parse tag
+        id: parse
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          MODULE="${TAG%/v*}"
+          VERSION="${TAG#*/v}"
+          echo "module=$MODULE" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Module: $MODULE, Version: $VERSION"
+
+  release-go:
+    needs: parse-tag
+    if: needs.parse-tag.outputs.module == 'testcontainers-go'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: testcontainers-go/go.mod
+
+      - name: Verify module
+        working-directory: testcontainers-go
+        run: |
+          go mod verify
+          go vet ./...
+
+      - name: Run tests
+        working-directory: testcontainers-go
+        run: go test ./...
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: testcontainers-go v${{ needs.parse-tag.outputs.version }}
+          generate_release_notes: true
+
+  release-jvm:
+    needs: parse-tag
+    if: needs.parse-tag.outputs.module == 'testcontainers-jvm'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        working-directory: testcontainers-jvm
+        run: ./gradlew build
+
+      - name: Upload JAR to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: testcontainers-jvm v${{ needs.parse-tag.outputs.version }}
+          generate_release_notes: true
+          files: testcontainers-jvm/build/libs/*.jar
+
+  release-rust:
+    needs: parse-tag
+    if: needs.parse-tag.outputs.module == 'testcontainers-rust'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Verify build
+        working-directory: testcontainers-rust
+        run: cargo build --release
+
+      - name: Publish to crates.io
+        working-directory: testcontainers-rust
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: testcontainers-rust v${{ needs.parse-tag.outputs.version }}
+          generate_release_notes: true

@@ -16,6 +16,7 @@ containers for integration tests.
 To see how to use these modules in practice, please refer to the examples directory within the module.
 
 - [Golang](./testcontainers-go/examples)
+- [JVM](./testcontainers-jvm)
 - [Rust](./testcontainers-rust/examples)
 
 ## Contributing
