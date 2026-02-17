@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    api platform('org.testcontainers:testcontainers-bom:1.20.4')
+    api platform('org.testcontainers:testcontainers-bom:1.21.4')
     api 'org.testcontainers:testcontainers'
 
     compileOnly 'org.projectlombok:lombok:1.18.42'
